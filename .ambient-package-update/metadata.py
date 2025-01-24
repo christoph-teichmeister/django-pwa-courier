@@ -23,7 +23,7 @@ METADATA = PackageMetadata(
         url="https://chris.teichmeister.lu/",
         email="christoph.teichmeister@gmail.com",
     ),
-    company="-",
+    company="Chris Teichmeister",
     license=LICENSE_MIT,
     license_year=2025,
     development_status="4 - Beta",
