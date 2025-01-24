@@ -33,7 +33,7 @@ METADATA = PackageMetadata(
         f"Django>={SUPPORTED_DJANGO_VERSIONS[0]}",
         "pywebpush>=2",
     ],
-    is_django_package=False,
+    is_django_package=False,  # TODO CT: Remove this
     supported_django_versions=SUPPORTED_DJANGO_VERSIONS,
     supported_python_versions=[
         "3.10",
