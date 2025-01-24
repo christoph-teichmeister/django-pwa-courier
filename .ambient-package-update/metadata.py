@@ -1,5 +1,6 @@
 from ambient_package_update.metadata.author import PackageAuthor
 from ambient_package_update.metadata.constants import (
+    DEPLOYMENT_STATUS_BETA,
     DEV_DEPENDENCIES,
     LICENSE_MIT,
     SUPPORTED_DJANGO_VERSIONS,
@@ -23,17 +24,17 @@ METADATA = PackageMetadata(
         url="https://chris.teichmeister.lu/",
         email="christoph.teichmeister@gmail.com",
     ),
-    company="Chris Teichmeister",
+    licenser="Chris Teichmeister",
     license=LICENSE_MIT,
     license_year=2025,
-    development_status="4 - Beta",
+    development_status=DEPLOYMENT_STATUS_BETA,
     has_migrations=False,
     readme_content=ReadmeContent(uses_internationalisation=False),
     dependencies=[
         f"Django>={SUPPORTED_DJANGO_VERSIONS[0]}",
         "pywebpush>=2",
     ],
-    is_django_package=False,  # TODO CT: Remove this
+    tests_require_django=False,  # TODO CT: Remove this
     supported_django_versions=SUPPORTED_DJANGO_VERSIONS,
     supported_python_versions=[
         "3.10",
