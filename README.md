@@ -64,7 +64,7 @@ delivers real-time push notifications to your users, all in one seamless package
 
 - Check coverage
   ````
-  coverage run -m pytest --ds settings tests
+  coverage run -m pytest tests
   coverage report -m
   ````
 
