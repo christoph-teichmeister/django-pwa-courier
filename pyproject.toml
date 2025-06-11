@@ -34,9 +34,6 @@ dependencies = [
     'pywebpush>=2',
 ]
 
-
-
-
 [project.optional-dependencies]
 dev = [
    'typer~=0.12',
@@ -198,6 +195,7 @@ line-ending = "auto"
   # Checks for packages that are missing an __init__.py file
   "INP001",
 ]
+
 [tool.tox]
 legacy_tox_ini = """
 [testenv]
