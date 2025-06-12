@@ -1,6 +1,7 @@
-from django.conf import settings
 from django.http import JsonResponse
 from django.views import generic
+
+from django_pwa_courier import settings
 
 
 class ManifestView(generic.View):
@@ -10,4 +11,4 @@ class ManifestView(generic.View):
         self.http_method_names = ["get", "options"]
 
     def get(self, request, *args, **kwargs):
-        return JsonResponse(data=settings.MANIFEST)
+        return JsonResponse(data=settings.PWA_MANIFEST)
