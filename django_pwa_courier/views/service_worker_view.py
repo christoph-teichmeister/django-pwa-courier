@@ -3,7 +3,7 @@ from django.views import generic
 
 
 class ServiceWorkerView(generic.TemplateView):
-    template_name = "core/pwa/serviceworker.js"
+    template_name = "django_pwa_courier/pwa/serviceworker.js"
     content_type = "text/javascript"
 
     def dispatch(self, request, *args, **kwargs):
@@ -20,6 +20,5 @@ class ServiceWorkerView(generic.TemplateView):
     def get_context_data(self, **kwargs) -> dict:
         return {
             **super().get_context_data(**kwargs),
-            "ADMIN_URL": settings.ADMIN_URL,
-            "CACHE_VERSION": settings.CACHE_VERSION,
+            "CACHE_VERSION": settings.PWA_CACHE_VERSION,
         }

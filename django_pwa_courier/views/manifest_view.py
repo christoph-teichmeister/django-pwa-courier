@@ -4,7 +4,10 @@ from django.views import generic
 
 
 class ManifestView(generic.View):
-    http_method_names = ["get", "options"]
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.http_method_names = ["get", "options"]
 
     def get(self, request, *args, **kwargs):
         return JsonResponse(data=settings.MANIFEST)
