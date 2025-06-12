@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<script>
+  // Get the protocol URL from the query parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const protocolUrl = urlParams.get('url');
+
+  /*
+  // TODO CT: Fix this maybe?
+  if (protocolUrl && protocolUrl.startsWith('{{ PWA_SANITIZED_WEB_PROTOCOL }}://')) {
+    // Remove the protocol prefix
+    window.location.href = protocolUrl.replace('{{ PWA_SANITIZED_WEB_PROTOCOL }}://', '')
+  } else {
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 2000);
+  }
+   */
+</script>

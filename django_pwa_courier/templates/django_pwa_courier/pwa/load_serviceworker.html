@@ -96,7 +96,7 @@
         await sendSubData(subscription);
       } else {
         // Get the VAPID public key and create subscription options
-        const key = "{{ WEBPUSH_SETTINGS.VAPID_PUBLIC_KEY }}"
+        const key = "{{ PWA_WEBPUSH_SETTINGS.VAPID_PUBLIC_KEY }}"
         const options = {
           userVisibleOnly: true,
           ...(key && {applicationServerKey: urlB64ToUint8Array(key)})
@@ -135,7 +135,7 @@
   // Initialise the service worker
   const initServiceWorker = () => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('{% url "core:serviceworker" %}', {
+      navigator.serviceWorker.register('{% url "django_pwa_courier:serviceworker" %}', {
         scope: '{{ manifest.scope }}'
       })
         .then((registration) => {
