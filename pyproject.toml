@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "django-pwa-courier"
 authors = [
-    {'name' = 'Chris Teichmeister', 'email' = 'christoph.teichmeister@gmail.com'},
+    { 'name' = 'Chris Teichmeister', 'email' = 'christoph.teichmeister@gmail.com' },
 ]
 readme = "README.md"
 classifiers = [
@@ -28,7 +28,7 @@ classifiers = [
     "Topic :: Utilities",
 ]
 dynamic = ["version", "description"]
-license = {"file" = "LICENSE.md"}
+license = { "file" = "LICENSE.md" }
 dependencies = [
     'Django>=4.2',
     'pywebpush>=2',
@@ -36,19 +36,19 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-   'typer~=0.12',
-   'pytest-django~=4.9',
-   'pytest-mock~=3.14',
-   'coverage~=7.6',
-   'pre-commit~=4.0',
-   'ruff~=0.6',
-   'sphinx~=7.1',
-   'sphinx-rtd-theme~=2.0',
-   'm2r2==0.3.3.post2',
-   'mistune<2.0.0',
-   'flit~=3.9',
-   'keyring~=25.4',
-   'ambient-package-update',
+    'typer~=0.12',
+    'pytest-django~=4.9',
+    'pytest-mock~=3.14',
+    'coverage~=7.6',
+    'pre-commit~=4.0',
+    'ruff~=0.6',
+    'sphinx~=7.1',
+    'sphinx-rtd-theme~=2.0',
+    'm2r2==0.3.3.post2',
+    'mistune<2.0.0',
+    'flit~=3.9',
+    'keyring~=25.4',
+    'ambient-package-update',
 ]
 
 [tool.flit.module]
@@ -63,31 +63,31 @@ name = "django_pwa_courier"
 
 [tool.ruff]
 lint.select = [
-    "E",       # pycodestyle errors
-    "W",       # pycodestyle warnings
-    "F",       # Pyflakes
-    "N",       # pep8-naming
-    "I",       # isort
-    "B",       # flake8-bugbear
-    "A",       # flake8-builtins
-    "DTZ",     # flake8-datetimez
-    "DJ",      # flake8-django
-    "TD",      # flake8-to-do
-    "RUF",     # Ruff-specific rules
-    "YTT",     # Avoid non-future-prove usages of "sys"
-    "C4",      # Checks for unnecessary conversions
-    "PIE",     # Bunch of useful rules
-    "INT",     # Validates your gettext translation strings
-    "PERF",    # PerfLint
-    "PGH",     # No all-purpose "# noqa" and eval validation
-    "PL",      # PyLint
-    "LOG",     # flake8-logging
-    "TID",     # flake8-tidy-imports
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # Pyflakes
+    "N", # pep8-naming
+    "I", # isort
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "DTZ", # flake8-datetimez
+    "DJ", # flake8-django
+    "TD", # flake8-to-do
+    "RUF", # Ruff-specific rules
+    "YTT", # Avoid non-future-prove usages of "sys"
+    "C4", # Checks for unnecessary conversions
+    "PIE", # Bunch of useful rules
+    "INT", # Validates your gettext translation strings
+    "PERF", # PerfLint
+    "PGH", # No all-purpose "# noqa" and eval validation
+    "PL", # PyLint
+    "LOG", # flake8-logging
+    "TID", # flake8-tidy-imports
     "PLR2004", # Magic numbers
-    "BLE",     # Checks for except clauses that catch all exceptions
-    "ANN401",  # Checks that function arguments are annotated with a more specific type than Any
-    "TRY",     # Clean try/except
-    "ERA",     # Commented out code
+    "BLE", # Checks for except clauses that catch all exceptions
+    "ANN401", # Checks that function arguments are annotated with a more specific type than Any
+    "TRY", # Clean try/except
+    "ERA", # Commented out code
     "INP"      # Ban PEP-420 implicit namespace packages
 ]
 lint.ignore = [
@@ -95,31 +95,31 @@ lint.ignore = [
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 lint.fixable = [
-    "E",       # pycodestyle errors
-    "W",       # pycodestyle warnings
-    "F",       # Pyflakes
-    "N",       # pep8-naming
-    "I",       # isort
-    "B",       # flake8-bugbear
-    "A",       # flake8-builtins
-    "DTZ",     # flake8-datetimez
-    "DJ",      # flake8-django
-    "TD",      # flake8-to-do
-    "RUF",     # Ruff-specific rules
-    "YTT",     # Avoid non-future-prove usages of "sys"
-    "C4",      # Checks for unnecessary conversions
-    "PIE",     # Bunch of useful rules
-    "INT",     # Validates your gettext translation strings
-    "PERF",    # PerfLint
-    "PGH",     # No all-purpose "# noqa" and eval validation
-    "PL",      # PyLint
-    "LOG",     # flake8-logging
-    "TID",     # flake8-tidy-imports
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # Pyflakes
+    "N", # pep8-naming
+    "I", # isort
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "DTZ", # flake8-datetimez
+    "DJ", # flake8-django
+    "TD", # flake8-to-do
+    "RUF", # Ruff-specific rules
+    "YTT", # Avoid non-future-prove usages of "sys"
+    "C4", # Checks for unnecessary conversions
+    "PIE", # Bunch of useful rules
+    "INT", # Validates your gettext translation strings
+    "PERF", # PerfLint
+    "PGH", # No all-purpose "# noqa" and eval validation
+    "PL", # PyLint
+    "LOG", # flake8-logging
+    "TID", # flake8-tidy-imports
     "PLR2004", # Magic numbers
-    "BLE",     # Checks for except clauses that catch all exceptions
-    "ANN401",  # Checks that function arguments are annotated with a more specific type than Any
-    "TRY",     # Clean try/except
-    "ERA",     # Commented out code
+    "BLE", # Checks for except clauses that catch all exceptions
+    "ANN401", # Checks that function arguments are annotated with a more specific type than Any
+    "TRY", # Clean try/except
+    "ERA", # Commented out code
     "INP"      # Ban PEP-420 implicit namespace packages
 ]
 lint.unfixable = []
@@ -172,28 +172,35 @@ line-ending = "auto"
 
 [tool.ruff.lint.per-file-ignores]
 "**/__init__.py" = [
-  # Allow seemingly unused imports
-  "F401",
+    # Allow seemingly unused imports
+    "F401",
 ]
 
 "**/tests/**/test_*.py" = [
-  # Allow boolean positional params in tests (for assertIs())
-  "FBT003",
+    # Allow boolean positional params in tests (for assertIs())
+    "FBT003",
 ]
 
 "scripts/*.py" = [
-  # Checks for packages that are missing an __init__.py file
-  "INP001",
+    # Checks for packages that are missing an __init__.py file
+    "INP001",
 ]
 
 ".ambient-package-update/*.py" = [
-  # Checks for packages that are missing an __init__.py file
-  "INP001",
+    # Checks for packages that are missing an __init__.py file
+    "INP001",
 ]
 
 "docs/*.py" = [
-  # Checks for packages that are missing an __init__.py file
-  "INP001",
+    # Checks for packages that are missing an __init__.py file
+    "INP001",
+    # Avoid specifying long messages outside the exception class
+    "TRY003",
+]
+
+"manage.py" = [
+    # Avoid specifying long messages outside the exception class
+    "TRY003"
 ]
 
 [tool.tox]
@@ -231,11 +238,11 @@ source = [
     "tests",
 ]
 omit = [
-  "setup.py",
-  "*_test.py",
-  "tests.py",
-  "testapp/*",
-  "tests/*",
+    "setup.py",
+    "*_test.py",
+    "tests.py",
+    "testapp/*",
+    "tests/*",
 ]
 
 [tool.coverage.report]
