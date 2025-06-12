@@ -26,12 +26,12 @@ delivers real-time push notifications to your users, all in one seamless package
 
 - Add module to `INSTALLED_APPS` within the main django `settings.py`:
 
-    ```python
-    INSTALLED_APPS = (
-        # ...
-        "django_pwa_courier",
-    )
-    ```
+```python
+INSTALLED_APPS = (
+    # ...
+    "django_pwa_courier",
+)
+```
 
 ## Contribute
 
