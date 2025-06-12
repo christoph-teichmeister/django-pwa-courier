@@ -1,5 +1,6 @@
 from django import template
-from django.conf import settings
+
+from django_pwa_courier import settings
 
 register = template.Library()
 
