@@ -14,9 +14,6 @@ delivers real-time push notifications to your users, all in one seamless package
 * [Full documentation](https://django-pwa-courier.readthedocs.io/en/latest/index.html)
 * Creator & Maintainer: [Chris Teichmeister](https://chris.teichmeister.lu/)
 
-
-
-
 ## Installation
 
 - Install the package via pip:
@@ -32,11 +29,9 @@ delivers real-time push notifications to your users, all in one seamless package
     ```python
     INSTALLED_APPS = (
         # ...
-        "pwa_courier",
+        "django_pwa_courier",
     )
     ```
-
-
 
 ## Contribute
 
@@ -97,8 +92,6 @@ Example: run all hooks of pre-push stage
 
 - To build the documentation, run: `sphinx-build docs/ docs/_build/html/`.
 - Open `docs/_build/html/index.html` to see the documentation.
-
-
 
 ### Publish to ReadTheDocs.io
 

@@ -52,7 +52,7 @@ dev = [
 ]
 
 [tool.flit.module]
-name = "pwa_courier"
+name = "django_pwa_courier"
 
 [project.urls]
 'Homepage' = 'https://github.com/christoph-teichmeister/django-pwa-courier/'
@@ -227,7 +227,7 @@ python_files = [
 branch = true
 parallel = true
 source = [
-    "pwa_courier",
+    "django_pwa_courier",
     "tests",
 ]
 omit = [
@@ -253,6 +253,6 @@ exclude_also = [
 
 [tool.coverage.path]
 source = [
-    "pwa_courier",
+    "django_pwa_courier",
     ".tox/**/site-packages",
 ]

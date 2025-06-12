@@ -10,7 +10,7 @@ from ambient_package_update.metadata.package import PackageMetadata
 from ambient_package_update.metadata.readme import ReadmeContent
 
 METADATA = PackageMetadata(
-    module_name="pwa_courier",
+    module_name="django_pwa_courier",
     package_name="django-pwa-courier",
     github_package_group="christoph-teichmeister",
     authors=[
@@ -34,7 +34,7 @@ METADATA = PackageMetadata(
         f"Django>={SUPPORTED_DJANGO_VERSIONS[0]}",
         "pywebpush>=2",
     ],
-    tests_require_django=False,  # TODO CT: Remove this
+    tests_require_django=False,  # TODO CT: Remove this  # noqa: TD002, TD003, TD004
     supported_django_versions=SUPPORTED_DJANGO_VERSIONS,
     supported_python_versions=[
         "3.10",
