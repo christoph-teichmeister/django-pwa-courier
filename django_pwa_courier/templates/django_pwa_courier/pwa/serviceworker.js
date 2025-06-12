@@ -1,7 +1,7 @@
 const offlineFile = "/offline/"
 
 // Using CACHE_VERSION from the Django template context (git commit hash)
-const staticCacheName = `listo-cache-v{{ CACHE_VERSION|default:'1.0.0' }}`;
+const staticCacheName = `{{ PWA_MANIFEST_ID }}-cache-v{{ PWA_CACHE_VERSION|default:'1.0.0' }}`;
 
 const criticalFilesToCache = [
   // TODO CT: Create offline file
@@ -149,7 +149,8 @@ self.addEventListener('activate', event => {
 
   event.waitUntil(caches.keys().then(cacheNames => {
     return Promise.all(cacheNames
-      .filter(cacheName => (cacheName.startsWith("listo-cache-")))
+      .filter(cacheName => (cacheName.startsWith("{{ PWA_MANIFEST_ID" +
+        " }}-cache-")))
       .filter(cacheName => (cacheName !== staticCacheName))
       .map(cacheName => caches.delete(cacheName)));
   }));

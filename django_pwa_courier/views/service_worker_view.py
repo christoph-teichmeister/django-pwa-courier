@@ -1,5 +1,6 @@
-from django.conf import settings
 from django.views import generic
+
+from django_pwa_courier import settings
 
 
 class ServiceWorkerView(generic.TemplateView):
@@ -20,5 +21,6 @@ class ServiceWorkerView(generic.TemplateView):
     def get_context_data(self, **kwargs) -> dict:
         return {
             **super().get_context_data(**kwargs),
-            "CACHE_VERSION": settings.PWA_CACHE_VERSION,
+            "PWA_MANIFEST_ID": settings.PWA_MANIFEST_ID,
+            "PWA_CACHE_VERSION": settings.PWA_CACHE_VERSION,
         }
