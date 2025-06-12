@@ -1,5 +1,6 @@
-from django.conf import settings
 from django.views import generic
+
+from django_pwa_courier import settings
 
 
 class HandleProtocolView(generic.TemplateView):
