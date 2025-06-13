@@ -1,4 +1,0 @@
-from django_pwa_courier.views.handle_protocol_view import HandleProtocolView
-from django_pwa_courier.views.manifest_view import ManifestView
-from django_pwa_courier.views.offline_view import OfflineView
-from django_pwa_courier.views.service_worker_view import ServiceWorkerView

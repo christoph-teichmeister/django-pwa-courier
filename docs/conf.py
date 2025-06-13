@@ -25,13 +25,13 @@ settings.configure(
         "django.contrib.sessions",
         "django.contrib.messages",
         "django.contrib.staticfiles",
-        "django_pwa_courier",
+        "pwa_courier",
     ],
     SECRET_KEY="ASDFjklö123456890",
 )
 django.setup()
 
-from django_pwa_courier import __version__  # noqa: E402
+from pwa_courier import __version__  # noqa: E402
 
 # -- Project information -----------------------------------------------------
 

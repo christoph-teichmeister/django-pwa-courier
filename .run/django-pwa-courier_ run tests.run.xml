@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="django-pwa-courier: ambient_package_update.cli render-templates" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="$USER_HOME$/.local/share/virtualenvs/django-pwa-courier/bin/python -m ambient_package_update.cli render-templates" />
+  <configuration default="false" name="django-pwa-courier: run tests" type="ShConfigurationType">
+    <option name="SCRIPT_TEXT" value="pytest --ds settings tests" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
