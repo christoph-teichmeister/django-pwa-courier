@@ -51,6 +51,7 @@ jobs:
       - name: Run Tests
         env:
           TOXENV: django${{ matrix.django-version }}
+          DJANGO_SETTINGS_MODULE: settings
         run: tox
       - name: Upload coverage data
         uses: actions/upload-artifact@v4
