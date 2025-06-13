@@ -1,10 +1,10 @@
 from django.views import generic
 
-from django_pwa_courier import settings
+from pwa_courier import settings
 
 
 class HandleProtocolView(generic.TemplateView):
-    template_name = "django_pwa_courier/pwa/handle_protocol.html"
+    template_name = "pwa_courier/pwa/handle_protocol.html"
 
     def get_context_data(self, **kwargs) -> dict:
         return {

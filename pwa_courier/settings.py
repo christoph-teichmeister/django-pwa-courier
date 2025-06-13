@@ -1,7 +1,19 @@
+from django.conf import settings
+
 # PWA-related settings
 # ------------------------------------------------------------------------------
-PWA_WEB_PROTOCOL: str = ""
-PWA_SANITIZED_WEB_PROTOCOL: str = f"web+{PWA_WEB_PROTOCOL}"
+
+
+def get_pwa_web_protocol() -> str:
+    """
+    Cache key to store registered handlers in.
+    """
+    return getattr(settings, "PWA_WEB_PROTOCOL", "")
+
+
+# TODO CT: Vielleicht PWA_SANITIZED_WEB_PROTOCOL in constants auslagern?  # noqa: TD002, TD003, TD004
+PWA_SANITIZED_WEB_PROTOCOL: str = f"web+{get_pwa_web_protocol()}"
+
 PWA_CACHE_VERSION: str = ""
 PWA_SERVICE_WORKER_DEBUG: bool = False
 
@@ -16,7 +28,15 @@ PWA_MANIFEST_DISPLAY_OVERRIDE: list = ["window-controls-overlay", "fullscreen"]
 PWA_MANIFEST_EDGE_SIDE_PANEL: dict = {}
 PWA_MANIFEST_FEATURES: list = []
 PWA_MANIFEST_ICONS: list = []
-PWA_MANIFEST_ID: str = ""
+
+
+def get_pwa_manifest_id() -> str:
+    """
+    Cache key to store registered handlers in.
+    """
+    return getattr(settings, "PWA_MANIFEST_ID", "")
+
+
 PWA_MANIFEST_LANG: str = "en-US"
 PWA_MANIFEST_LAUNCH_HANDLER: dict = {"client_mode": ["navigate-existing", "auto"]}
 PWA_MANIFEST_NAME: str = ""
@@ -44,7 +64,7 @@ PWA_MANIFEST: dict = {
     "edge_side_panel": PWA_MANIFEST_EDGE_SIDE_PANEL,
     "features": PWA_MANIFEST_FEATURES,
     "icons": PWA_MANIFEST_ICONS,
-    "id": PWA_MANIFEST_ID,
+    "id": get_pwa_manifest_id(),
     "lang": PWA_MANIFEST_LANG,
     "launch_handler": PWA_MANIFEST_LAUNCH_HANDLER,
     "name": PWA_MANIFEST_NAME,

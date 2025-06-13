@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views import generic
 
-from django_pwa_courier import settings
+from pwa_courier import settings
 
 
 class ManifestView(generic.View):

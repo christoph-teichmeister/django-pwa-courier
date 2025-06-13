@@ -1,8 +1,8 @@
 from django.urls import path
 
-from django_pwa_courier import views
+from pwa_courier import views
 
-app_name = "django_pwa_courier"
+app_name = "pwa_courier"
 
 urlpatterns = [
     path("manifest.json", views.ManifestView.as_view(), name="manifest"),

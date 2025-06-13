@@ -1,10 +1,10 @@
 from django.views import generic
 
-from django_pwa_courier import settings
+from pwa_courier import settings
 
 
 class ServiceWorkerView(generic.TemplateView):
-    template_name = "django_pwa_courier/pwa/serviceworker.js"
+    template_name = "pwa_courier/pwa/serviceworker.js"
     content_type = "text/javascript"
 
     def dispatch(self, request, *args, **kwargs):
@@ -21,6 +21,6 @@ class ServiceWorkerView(generic.TemplateView):
     def get_context_data(self, **kwargs) -> dict:
         return {
             **super().get_context_data(**kwargs),
-            "PWA_MANIFEST_ID": settings.PWA_MANIFEST_ID,
+            "PWA_MANIFEST_ID": settings.get_pwa_manifest_id(),
             "PWA_CACHE_VERSION": settings.PWA_CACHE_VERSION,
         }

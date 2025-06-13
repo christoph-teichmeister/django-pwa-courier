@@ -4,5 +4,5 @@ from django.apps import AppConfig
 
 
 class DjangoPWACourierAppConfig(AppConfig):
-    name = "django_pwa_courier"
+    name = "pwa_courier"
     verbose_name = "django-pwa-courier"

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from django_pwa_courier import settings
-from django_pwa_courier.templatetags.pwa_tags import load_pwa_meta_data, load_serviceworker
+from pwa_courier import settings
+from pwa_courier.templatetags.pwa_tags import load_pwa_meta_data, load_serviceworker
 
 
 class PWATagsTest(TestCase):

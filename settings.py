@@ -9,7 +9,7 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_pwa_courier",
+    "pwa_courier",
     "testapp",
 )
 
@@ -63,8 +63,4 @@ MIDDLEWARE = (
 
 TIME_ZONE = "UTC"
 
-LOCALE_PATHS = [BASE_PATH / "django_pwa_courier/locale"]
-
-PASSWORD_HASHERS = [
-    "django.contrib.auth.hashers.MD5PasswordHasher",
-]
+LOCALE_PATHS = [BASE_PATH / "pwa_courier/locale"]
