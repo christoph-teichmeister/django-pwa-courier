@@ -22,5 +22,5 @@ class ServiceWorkerView(generic.TemplateView):
         return {
             **super().get_context_data(**kwargs),
             "PWA_MANIFEST_ID": settings.get_pwa_manifest_id(),
-            "PWA_CACHE_VERSION": settings.PWA_CACHE_VERSION,
+            "PWA_CACHE_VERSION": settings.get_pwa_cache_version(),
         }

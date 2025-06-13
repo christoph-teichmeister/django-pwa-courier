@@ -1,6 +1,6 @@
 from django.views import generic
 
-from pwa_courier import settings
+from pwa_courier import constants
 
 
 class HandleProtocolView(generic.TemplateView):
@@ -9,5 +9,5 @@ class HandleProtocolView(generic.TemplateView):
     def get_context_data(self, **kwargs) -> dict:
         return {
             **super().get_context_data(**kwargs),
-            "PWA_SANITIZED_WEB_PROTOCOL": settings.PWA_SANITIZED_WEB_PROTOCOL,
+            "PWA_SANITIZED_WEB_PROTOCOL": constants.get_sanitised_pwa_web_protocol(),
         }

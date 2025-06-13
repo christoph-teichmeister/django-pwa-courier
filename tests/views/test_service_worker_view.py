@@ -27,4 +27,4 @@ class ServiceWorkerViewTest(TestCase):
         context_data = ServiceWorkerView().get_context_data()
 
         self.assertEqual(context_data["PWA_MANIFEST_ID"], settings.get_pwa_manifest_id())
-        self.assertEqual(context_data["PWA_CACHE_VERSION"], settings.PWA_CACHE_VERSION)
+        self.assertEqual(context_data["PWA_CACHE_VERSION"], settings.get_pwa_cache_version())
