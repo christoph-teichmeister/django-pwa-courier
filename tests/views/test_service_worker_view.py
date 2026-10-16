@@ -26,3 +26,11 @@ def test_service_worker_template_can_be_swapped(client, settings, tmp_path):
 
     assert "// app extra" in content
     assert "notificationclick" in content
+
+
+def test_service_worker_without_admin(client, settings):
+    settings.ROOT_URLCONF = "tests.helpers"
+
+    content = client.get("/serviceworker.js").content.decode()
+
+    assert 'adminUrl = ""' in content
