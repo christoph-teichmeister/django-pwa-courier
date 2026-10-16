@@ -218,6 +218,7 @@ python =
 """
 
 [tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "settings"
 python_files = [
     "tests.py",
     "test_*.py",
