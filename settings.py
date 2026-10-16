@@ -15,7 +15,7 @@ INSTALLED_APPS = (
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost:8000"]
+ALLOWED_HOSTS = ["localhost", "testserver"]
 
 SECRET_KEY = "ASDFjklö123456890"
 
@@ -64,3 +64,11 @@ MIDDLEWARE = (
 TIME_ZONE = "UTC"
 
 LOCALE_PATHS = [BASE_PATH / "pwa_courier/locale"]
+
+PWA_MANIFEST = {
+    "name": "Test App",
+    "short_name": "testapp",
+    "scope": "/",
+    "icons": [{"src": "/static/icon-192.png", "sizes": "192x192"}],
+}
+PWA_WEBPUSH = {"VAPID_PUBLIC_KEY": "PUBLICKEY", "VAPID_PRIVATE_KEY": "", "VAPID_ADMIN_EMAIL": "admin@example.com"}

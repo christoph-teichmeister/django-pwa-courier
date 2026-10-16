@@ -33,6 +33,80 @@ INSTALLED_APPS = (
 )
 ```
 
+## Setup
+
+```python
+# urls.py: the service worker must be served from the root to control the whole site
+urlpatterns = [path("", include("pwa_courier.urls")), ...]
+
+# settings.py
+PWA_MANIFEST = {
+    "name": "My App",
+    "short_name": "myapp",
+    "scope": "/",
+    "start_url": "/",
+    "display": "standalone",
+    "icons": [{"src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png"}],
+}
+PWA_WEBPUSH = {
+    "VAPID_PUBLIC_KEY": "...",
+    "VAPID_PRIVATE_KEY": "...",
+    "VAPID_ADMIN_EMAIL": "admin@example.com",
+    "STALE_AFTER_DAYS": 10,
+}
+PWA_CACHE_VERSION = "1"  # bump (e.g. git commit) to drop old service worker caches
+PWA_ICON_VERSION = 3  # optional, `?v=` on icons; or a dotted path to a callable
+PWA_USER_WANTS_PUSH = "..."  # optional dotted path to callable(user) -> bool,
+# default: user.wants_to_receive_webpush_notifications or True
+PWA_SERVICE_WORKER_TEMPLATE = (
+    "..."  # optional, your template that extends the package worker
+)
+PWA_SERVICE_WORKER_DEBUG = False
+```
+
+Run `python manage.py migrate`.
+
+```django
+{% load pwa_tags %}
+<head>{% pwa_meta %}</head>
+<body>
+  ...
+  <button onclick="pwaCourier.subscribe()">Enable notifications</button>
+  {% pwa_ios_install_hint %}  {# optional banner: iOS only allows push from the home-screen app #}
+  {% pwa_serviceworker %}     {# registers the worker, re-confirms subscriptions; CSP nonce is passed through #}
+</body>
+```
+
+`pwaCourier.subscribe()` must run from a user gesture (iOS). It resolves to `true` when subscribed and fires a
+`notificationsEnabled` event on `document`. `pwaCourier.unsubscribe()` removes the subscription.
+
+### Sending
+
+```python
+from pwa_courier.notifications import Notification, has_only_stale_subscriptions
+
+results = Notification(head="Hi", body="Tap to open", click_url="/inbox/").send_to(user)
+Notification.was_delivered(results)  # any subscription accepted it
+has_only_stale_subscriptions(
+    user
+)  # no subscription re-confirmed within STALE_AFTER_DAYS
+```
+
+Expired subscriptions (404/410) are deleted, other push errors are logged and return `False`.
+
+### Service worker
+
+The package worker precaches the offline page and manifest icons, serves pages network-first (cached copy, then
+`/offline/` as fallback) and static files cache-first, shows pushes and handles notification clicks (focuses an open
+window and redirects it, else opens one). Extend it:
+
+```django
+{% extends "django_pwa_courier/pwa/serviceworker.js" %}
+{% block precache %}"/static/app.css",{% endblock %}
+{% block fetch %}/* your own caching instead of the default */{% endblock %}
+{% block extra %}/* additional listeners */{% endblock %}
+```
+
 ### Publish to ReadTheDocs.io
 
 - Fetch the latest changes in GitHub mirror and push them
