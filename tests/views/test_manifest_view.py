@@ -1,17 +1,19 @@
-from unittest import TestCase, mock
-
-from pwa_courier import settings
-from pwa_courier.views import ManifestView
+import json
+from http import HTTPStatus
 
 
-class ManifestViewTest(TestCase):
-    def test_init_sets_class_attribute(self):
-        view = ManifestView()
-        self.assertEqual(view.http_method_names, ["get", "options"])
+def test_manifest_returns_settings_manifest(client):
+    response = client.get("/manifest.json")
 
-    def test_get_returns_json_response_with_settings_manifest_as_data(self):
-        view = ManifestView()
-        with mock.patch("pwa_courier.views.manifest_view.JsonResponse") as mocked_json_response:
-            view.get(request=None)
+    assert response.status_code == HTTPStatus.OK
+    assert response["Content-Type"] == "application/manifest+json"
+    assert json.loads(response.content)["name"] == "Test App"
 
-        mocked_json_response.assert_called_once_with(data=settings.PWA_MANIFEST)
+
+def test_manifest_cache_busts_icons(client, settings):
+    settings.PWA_ICON_VERSION = 7
+
+    icons = json.loads(client.get("/manifest.json").content)["icons"]
+
+    assert icons[0]["src"] == "/static/icon-192.png?v=7"
+    assert settings.PWA_MANIFEST["icons"][0]["src"] == "/static/icon-192.png"  # settings not mutated

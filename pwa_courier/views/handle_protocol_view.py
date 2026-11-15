@@ -4,7 +4,7 @@ from pwa_courier import constants
 
 
 class HandleProtocolView(generic.TemplateView):
-    template_name = "pwa_courier/pwa/handle_protocol.html"
+    template_name = "django_pwa_courier/pwa/handle_protocol.html"
 
     def get_context_data(self, **kwargs) -> dict:
         return {

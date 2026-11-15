@@ -1,19 +1,34 @@
-from unittest import TestCase
-
-from pwa_courier import settings
-from pwa_courier.templatetags.pwa_tags import load_pwa_meta_data, load_serviceworker
+from django.template import Context, Template
 
 
-class PWATagsTest(TestCase):
-    def test_load_pwa_meta_data_returns_pwa_manifest_dict(self):
-        self.assertEqual(load_pwa_meta_data(context=None), {"PWA_MANIFEST": settings.get_pwa_manifest()})
+def _render(tag, **context):
+    return Template("{% load pwa_tags %}{% " + tag + " %}").render(Context(context))
 
-    def test_load_serviceworker_returns_relevant_dict(self):
-        self.assertEqual(
-            load_serviceworker(context=None),
-            {
-                "PWA_MANIFEST": settings.get_pwa_manifest(),
-                "PWA_SERVICE_WORKER_DEBUG": settings.get_pwa_service_worker_debug(),
-                "PWA_WEBPUSH_SETTINGS": settings.get_pwa_webpush_settings(),
-            },
-        )
+
+def test_pwa_meta_links_manifest_and_ios_tags(settings):
+    settings.PWA_ICON_VERSION = 3
+
+    html = _render("pwa_meta")
+
+    assert 'href="/manifest.json"' in html
+    assert 'name="apple-mobile-web-app-capable"' in html
+    assert 'href="/static/icon-192.png?v=3" sizes="192x192"' in html
+
+
+def test_pwa_serviceworker_passes_nonce_and_only_public_key(settings):
+    settings.PWA_WEBPUSH = {**settings.PWA_WEBPUSH, "VAPID_PRIVATE_KEY": "secret-private"}
+
+    html = _render("pwa_serviceworker", csp_nonce="n0nce")
+
+    assert 'nonce="n0nce"' in html
+    assert "PUBLICKEY" in html
+    assert "secret-private" not in html
+    assert "/push/subscribe/" in html
+    assert "/serviceworker.js" in html
+
+
+def test_pwa_ios_install_hint_renders_hidden_banner():
+    html = _render("pwa_ios_install_hint")
+
+    assert 'id="pwa-ios-install-hint" hidden' in html
+    assert "Add to Home Screen" in html

@@ -4,10 +4,7 @@ from pwa_courier import settings
 
 
 class OfflineView(generic.TemplateView):
-    template_name = "pwa_courier/offline.html"
+    template_name = "django_pwa_courier/pwa/offline.html"
 
     def get_context_data(self, **kwargs):
-        return {
-            **super().get_context_data(**kwargs),
-            "PWA_MANIFEST_ID": settings.get_pwa_manifest_id(),
-        }
+        return {**super().get_context_data(**kwargs), "PWA_MANIFEST": settings.get_pwa_manifest()}

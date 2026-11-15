@@ -1,30 +1,36 @@
-from unittest import TestCase, mock
-from unittest.mock import MagicMock
-
-from django.views.generic import TemplateView
-
-from pwa_courier import settings
-from pwa_courier.views import ServiceWorkerView
+from http import HTTPStatus
 
 
-class ServiceWorkerViewTest(TestCase):
-    def test_class_attributes(self):
-        self.assertEqual(ServiceWorkerView.template_name, "pwa_courier/pwa/serviceworker.js")
-        self.assertEqual(ServiceWorkerView.content_type, "text/javascript")
+def test_service_worker_is_served_as_javascript(client):
+    response = client.get("/serviceworker.js")
 
-    def test_dispatch_sets_headers_correctly(self):
-        view = ServiceWorkerView()
-        mocked_response = MagicMock(headers={})
-        with mock.patch.object(TemplateView, "dispatch", return_value=mocked_response):
-            response = view.dispatch(request=None)
+    assert response.status_code == HTTPStatus.OK
+    assert response["Content-Type"] == "text/javascript"
+    assert response["Service-Worker-Allowed"] == "/"
+    content = response.content.decode()
+    assert r'const cachePrefix = "testapp\u002Dcache\u002D"' in content
+    assert r'"/static/icon\u002D192.png"' in content
+    assert 'const offlineUrl = "/offline/"' in content
+    assert 'adminUrl = "/admin/"' in content
+    assert 'addEventListener("push"' in content
 
-        self.assertEqual(response.headers["Service-Worker-Allowed"], "/")
-        self.assertEqual(response.headers["Cache-Control"], "no-cache, no-store, must-revalidate")
-        self.assertEqual(response.headers["Pragma"], "no-cache")
-        self.assertEqual(response.headers["Expires"], "0")
 
-    def test_get_context_data_sets_pwa_manifest_id_and_pwa_cache_id(self):
-        context_data = ServiceWorkerView().get_context_data()
+def test_service_worker_template_can_be_swapped(client, settings, tmp_path):
+    (tmp_path / "sw.js").write_text(
+        '{% extends "django_pwa_courier/pwa/serviceworker.js" %}{% block extra %}// app extra{% endblock %}'
+    )
+    settings.TEMPLATES = [{**settings.TEMPLATES[0], "DIRS": [tmp_path]}]
+    settings.PWA_SERVICE_WORKER_TEMPLATE = "sw.js"
 
-        self.assertEqual(context_data["PWA_MANIFEST_ID"], settings.get_pwa_manifest_id())
-        self.assertEqual(context_data["PWA_CACHE_VERSION"], settings.get_pwa_cache_version())
+    content = client.get("/serviceworker.js").content.decode()
+
+    assert "// app extra" in content
+    assert "notificationclick" in content
+
+
+def test_service_worker_without_admin(client, settings):
+    settings.ROOT_URLCONF = "tests.helpers"
+
+    content = client.get("/serviceworker.js").content.decode()
+
+    assert 'adminUrl = ""' in content
