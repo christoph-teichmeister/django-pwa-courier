@@ -10,7 +10,7 @@ from ambient_package_update.metadata.package import PackageMetadata
 from ambient_package_update.metadata.readme import ReadmeContent
 
 METADATA = PackageMetadata(
-    module_name="django_pwa_courier",
+    module_name="pwa_courier",
     package_name="django-pwa-courier",
     github_package_group="christoph-teichmeister",
     authors=[

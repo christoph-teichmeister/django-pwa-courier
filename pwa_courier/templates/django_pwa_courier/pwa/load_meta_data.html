@@ -1,0 +1,19 @@
+{% with favicon=PWA_MANIFEST.icons|first %}
+    <link rel="icon" sizes="{{ favicon.sizes }}" href="{{ favicon.src }}{% if PWA_ICON_VERSION %}?v={{ PWA_ICON_VERSION }}{% endif %}">
+    <link rel="manifest" href="{% url 'pwa_courier:manifest' %}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="{{ PWA_MANIFEST.name }}">
+    <meta name="theme-color" content="{{ PWA_MANIFEST.theme_color }}">
+    <!-- iOS: needed so "Add to Home Screen" creates a standalone app, the only place iOS allows web push -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="{{ PWA_MANIFEST.name }}">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    {% for icon in PWA_MANIFEST.icons %}
+        <link rel="apple-touch-icon" href="{{ icon.src }}{% if PWA_ICON_VERSION %}?v={{ PWA_ICON_VERSION }}{% endif %}" sizes="{{ icon.sizes }}">
+    {% endfor %}
+    {% for splash in PWA_MANIFEST.splash_screens %}
+        <link rel="apple-touch-startup-image" href="{{ splash.src }}{% if PWA_ICON_VERSION %}?v={{ PWA_ICON_VERSION }}{% endif %}" media="{{ splash.media }}">
+    {% endfor %}
+    <meta name="msapplication-TileColor" content="{{ PWA_MANIFEST.background_color }}">
+    <meta name="msapplication-TileImage" content="{{ favicon.src }}{% if PWA_ICON_VERSION %}?v={{ PWA_ICON_VERSION }}{% endif %}">
+{% endwith %}

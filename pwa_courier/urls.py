@@ -1,12 +1,13 @@
 from django.urls import path
 
-from django_pwa_courier import views
+from pwa_courier import views
 
-app_name = "django_pwa_courier"
+app_name = "pwa_courier"
 
 urlpatterns = [
     path("manifest.json", views.ManifestView.as_view(), name="manifest"),
+    path("serviceworker.js", views.ServiceWorkerView.as_view(), name="serviceworker"),
     path("offline/", views.OfflineView.as_view(), name="offline"),
     path("handle-protocol/", views.HandleProtocolView.as_view(), name="handle_protocol"),
-    path("serviceworker.js", views.ServiceWorkerView.as_view(), name="serviceworker"),
+    path("push/subscribe/", views.PushSubscribeView.as_view(), name="push_subscribe"),
 ]

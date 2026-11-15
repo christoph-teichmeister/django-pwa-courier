@@ -9,13 +9,13 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_pwa_courier",
+    "pwa_courier",
     "testapp",
 )
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost:8000"]
+ALLOWED_HOSTS = ["localhost", "testserver"]
 
 SECRET_KEY = "ASDFjklö123456890"
 
@@ -63,8 +63,12 @@ MIDDLEWARE = (
 
 TIME_ZONE = "UTC"
 
-LOCALE_PATHS = [BASE_PATH / "django_pwa_courier/locale"]
+LOCALE_PATHS = [BASE_PATH / "pwa_courier/locale"]
 
-PASSWORD_HASHERS = [
-    "django.contrib.auth.hashers.MD5PasswordHasher",
-]
+PWA_MANIFEST = {
+    "name": "Test App",
+    "short_name": "testapp",
+    "scope": "/",
+    "icons": [{"src": "/static/icon-192.png", "sizes": "192x192"}],
+}
+PWA_WEBPUSH = {"VAPID_PUBLIC_KEY": "PUBLICKEY", "VAPID_PRIVATE_KEY": "", "VAPID_ADMIN_EMAIL": "admin@example.com"}

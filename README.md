@@ -29,69 +29,83 @@ delivers real-time push notifications to your users, all in one seamless package
 ```python
 INSTALLED_APPS = (
     # ...
-    "django_pwa_courier",
+    "pwa_courier",
 )
 ```
 
-## Contribute
+## Setup
 
-### Setup package for development
+```python
+# urls.py: the service worker must be served from the root to control the whole site
+urlpatterns = [path("", include("pwa_courier.urls")), ...]
 
-- Create a Python virtualenv and activate it
-- Install "pip-tools" with `pip install -U pip-tools`
-- Compile the requirements with `pip-compile --extra dev, -o requirements.txt pyproject.toml --resolver=backtracking`
-- Sync the dependencies with your virtualenv with `pip-sync`
+# settings.py
+PWA_MANIFEST = {
+    "name": "My App",
+    "short_name": "myapp",
+    "scope": "/",
+    "start_url": "/",
+    "display": "standalone",
+    "icons": [{"src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png"}],
+}
+PWA_WEBPUSH = {
+    "VAPID_PUBLIC_KEY": "...",
+    "VAPID_PRIVATE_KEY": "...",
+    "VAPID_ADMIN_EMAIL": "admin@example.com",
+    "STALE_AFTER_DAYS": 10,
+}
+PWA_CACHE_VERSION = "1"  # bump (e.g. git commit) to drop old service worker caches
+PWA_ICON_VERSION = 3  # optional, `?v=` on icons; or a dotted path to a callable
+PWA_USER_WANTS_PUSH = "..."  # optional dotted path to callable(user) -> bool,
+# default: user.wants_to_receive_webpush_notifications or True
+PWA_SERVICE_WORKER_TEMPLATE = (
+    "..."  # optional, your template that extends the package worker
+)
+PWA_SERVICE_WORKER_DEBUG = False
+```
 
-### Add functionality
+Run `python manage.py migrate`.
 
-- Create a new branch for your feature
-- Change the dependency in your requirements.txt to a local (editable) one that points to your local file system:
-  `-e /Users/workspace/django-pwa-courier` or via pip  `pip install -e /Users/workspace/django-pwa-courier`
-- Ensure the code passes the tests
-- Create a pull request
+```django
+{% load pwa_tags %}
+<head>{% pwa_meta %}</head>
+<body>
+  ...
+  <button onclick="pwaCourier.subscribe()">Enable notifications</button>
+  {% pwa_ios_install_hint %}  {# optional banner: iOS only allows push from the home-screen app #}
+  {% pwa_serviceworker %}     {# registers the worker, re-confirms subscriptions; CSP nonce is passed through #}
+</body>
+```
 
-### Run tests
+`pwaCourier.subscribe()` must run from a user gesture (iOS). It resolves to `true` when subscribed and fires a
+`notificationsEnabled` event on `document`. `pwaCourier.unsubscribe()` removes the subscription.
 
-- Run tests
-  ````
-  pytest --ds settings tests
-  ````
+### Sending
 
-- Check coverage
-  ````
-  coverage run -m pytest tests
-  coverage report -m
-  ````
+```python
+from pwa_courier.notifications import Notification, has_only_stale_subscriptions
 
-### Git hooks (via pre-commit)
+results = Notification(head="Hi", body="Tap to open", click_url="/inbox/").send_to(user)
+Notification.was_delivered(results)  # any subscription accepted it
+has_only_stale_subscriptions(
+    user
+)  # no subscription re-confirmed within STALE_AFTER_DAYS
+```
 
-We use pre-push hooks to ensure that only linted code reaches our remote repository and pipelines aren't triggered in
-vain.
+Expired subscriptions (404/410) are deleted, other push errors are logged and return `False`.
 
-To enable the configured pre-push hooks, you need to [install](https://pre-commit.com/) pre-commit and run once:
+### Service worker
 
-    pre-commit install -t pre-push -t pre-commit --install-hooks
+The package worker precaches the offline page and manifest icons, serves pages network-first (cached copy, then
+`/offline/` as fallback) and static files cache-first, shows pushes and handles notification clicks (focuses an open
+window and redirects it, else opens one). Extend it:
 
-This will permanently install the git hooks for both, frontend and backend, in your local
-[`.git/hooks`](./.git/hooks) folder.
-The hooks are configured in the [`.pre-commit-config.yaml`](templates/.pre-commit-config.yaml.tpl).
-
-You can check whether hooks work as intended using the [run](https://pre-commit.com/#pre-commit-run) command:
-
-    pre-commit run [hook-id] [options]
-
-Example: run single hook
-
-    pre-commit run ruff --all-files --hook-stage push
-
-Example: run all hooks of pre-push stage
-
-    pre-commit run --all-files --hook-stage push
-
-### Update documentation
-
-- To build the documentation, run: `sphinx-build docs/ docs/_build/html/`.
-- Open `docs/_build/html/index.html` to see the documentation.
+```django
+{% extends "django_pwa_courier/pwa/serviceworker.js" %}
+{% block precache %}"/static/app.css",{% endblock %}
+{% block fetch %}/* your own caching instead of the default */{% endblock %}
+{% block extra %}/* additional listeners */{% endblock %}
+```
 
 ### Publish to ReadTheDocs.io
 
@@ -129,4 +143,3 @@ configuration and setup files. It works similar to well-known updaters like `pyu
 
 To run an update, refer to the [documentation page](https://pypi.org/project/ambient-package-update/)
 of the "ambient-package-update".
-

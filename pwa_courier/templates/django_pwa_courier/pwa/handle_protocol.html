@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
   // Get the protocol URL from the query parameters
   const urlParams = new URLSearchParams(window.location.search);
   const protocolUrl = urlParams.get('url');

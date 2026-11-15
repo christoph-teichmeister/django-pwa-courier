@@ -1,0 +1,12 @@
+{% load i18n %}<!DOCTYPE html>
+<html lang="{{ PWA_MANIFEST.lang|default:'en' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ PWA_MANIFEST.name }}</title>
+</head>
+<body style="font-family: system-ui, sans-serif; text-align: center; padding: 2rem;">
+    <h1>{% translate "You seem to be offline" %}</h1>
+    <p>{% blocktranslate with name=PWA_MANIFEST.name %}{{ name }} needs an internet connection for this page. Please try again later.{% endblocktranslate %}</p>
+</body>
+</html>

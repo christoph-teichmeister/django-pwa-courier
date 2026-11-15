@@ -1,0 +1,109 @@
+{% load i18n %}<script nonce="{{ csp_nonce }}">
+  (() => {
+    const debug = {{ PWA_SERVICE_WORKER_DEBUG|yesno:"true,false" }};
+    const vapidPublicKey = "{{ PWA_WEBPUSH.VAPID_PUBLIC_KEY|escapejs }}";
+    const saveFailedMessage = "{% translate 'We could not save your notification settings for this browser. Please try again.' as msg %}{{ msg|escapejs }}";
+
+    const urlB64ToUint8Array = (base64String) => {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const rawData = window.atob((base64String + padding).replace(/-/g, '+').replace(/_/g, '/'));
+      return Uint8Array.from(rawData, char => char.charCodeAt(0));
+    };
+
+    const sendSubData = (subscription, statusType = 'subscribe') => {
+      const match = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig);
+      return fetch('{% url "pwa_courier:push_subscribe" %}', {
+        method: 'POST',
+        body: JSON.stringify({
+          status_type: statusType,
+          subscription: subscription.toJSON(),
+          browser: match ? match[0].toLowerCase() : 'unknown',
+          user_agent: navigator.userAgent.slice(0, 500),
+        }),
+        headers: {'content-type': 'application/json'},
+        credentials: 'include',
+      }).then(response => {
+        if (debug) console.debug('push subscribe response', response.status);
+        if (!response.ok) throw new Error(`push subscribe failed: ${response.status}`);
+        return response;
+      });
+    };
+
+    // Old iOS Safari only supports the callback form of requestPermission, newer ones the promise form
+    const ensureNotificationPermission = () => new Promise(resolve => {
+      if (!('Notification' in window)) return resolve('denied');
+      if (Notification.permission !== 'default' || typeof Notification.requestPermission !== 'function') {
+        return resolve(Notification.permission);
+      }
+      let settled = false;
+      const finish = (value) => {
+        if (!settled) {
+          settled = true;
+          resolve(value || Notification.permission);
+        }
+      };
+      try {
+        const outcome = Notification.requestPermission(finish);
+        if (outcome && typeof outcome.then === 'function') outcome.then(finish).catch(() => finish());
+      } catch (error) {
+        finish();
+      }
+    });
+
+    const pushIsSupported = (registration) =>
+      'PushManager' in window && registration && registration.pushManager && registration.showNotification;
+
+    // Call from a user gesture (button click): iOS refuses the permission prompt otherwise
+    // (ask for permission first, before any await, so the gesture is still active)
+    const subscribe = () => ensureNotificationPermission().then(permission => {
+      if (permission !== 'granted') return false;
+      return navigator.serviceWorker.ready.then(registration => {
+        if (!pushIsSupported(registration)) return false;
+        return registration.pushManager.getSubscription()
+          .then(subscription => subscription || registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            ...(vapidPublicKey && {applicationServerKey: urlB64ToUint8Array(vapidPublicKey)}),
+          }))
+          .then(subscription => sendSubData(subscription))
+          .then(() => {
+            document.dispatchEvent(new CustomEvent('notificationsEnabled'));
+            return true;
+          });
+      });
+    }).catch(error => {
+      console.error('Push subscription failed:', error);
+      if (String(error).includes('push service error')) {
+        window.alert("If you are using Brave, enable 'Use Google services for push messaging' in brave://settings/privacy");
+      } else {
+        window.alert(saveFailedMessage);
+      }
+      return false;
+    });
+
+    const unsubscribe = () => navigator.serviceWorker.ready
+      .then(registration => registration.pushManager.getSubscription())
+      .then(subscription => subscription && sendSubData(subscription, 'unsubscribe').then(() => subscription.unsubscribe()));
+
+    window.pwaCourier = {subscribe, unsubscribe};
+
+    if (!('serviceWorker' in navigator)) return;
+
+    navigator.serviceWorker.register('{% url "pwa_courier:serviceworker" %}', {scope: '{{ PWA_MANIFEST.scope|default:"/"|escapejs }}'})
+      .then(registration => {
+        if (debug) console.info('ServiceWorker registered with scope', registration.scope);
+        // Re-send an existing subscription on every load, so the server knows it is still alive
+        if ('Notification' in window && Notification.permission === 'granted' && pushIsSupported(registration)) {
+          registration.pushManager.getSubscription()
+            .then(subscription => subscription && sendSubData(subscription))
+            .catch(error => console.error('Re-confirming push subscription failed:', error));
+        }
+      })
+      .catch(error => console.error('ServiceWorker registration failed:', error));
+
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.action === 'redirect-from-notificationclick') {
+        window.location.href = event.data.url;
+      }
+    });
+  })();
+</script>
